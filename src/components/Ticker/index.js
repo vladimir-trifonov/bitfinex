@@ -7,7 +7,7 @@ import Table from 'react-immutable-table'
 
 class Ticker extends PureComponent {
   render () {
-    const { ticker, symbol } = this.props
+    const { ticker } = this.props
     
     return (
       <Table

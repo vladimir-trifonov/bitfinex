@@ -1,7 +1,7 @@
 import { eventChannel } from 'redux-saga'
 import { take, takeEvery, call, fork, put } from 'redux-saga/effects'
 import createSocket from '../socket'
-import actions, { SOCKET_SUBSCRIBE, SOCKET_UNSUBSCRIBE } from '../actions'
+import actions, { SOCKET_SUBSCRIBE, SOCKET_UNSUBSCRIBE, SOCKET_ON_OFF } from '../actions'
 
 let socket = createSocket()
 
@@ -36,4 +36,13 @@ function* socketUnsubscribe ({ payload }) {
 
 export function* socketUnsubscribeSaga () {
   yield takeEvery(SOCKET_UNSUBSCRIBE, socketUnsubscribe)
+}
+
+function* socketOnOffUpdate ({ payload }) {
+  if (!socket.ready) return
+  yield call(socket.onOff, payload)
+}
+
+export function* socketOnOffUpdateSaga () {
+  yield takeEvery(SOCKET_ON_OFF, socketOnOffUpdate)
 }

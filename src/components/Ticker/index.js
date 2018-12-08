@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { emptyTickerAction } from '../../actions'
+import { emptyTickerAction, socketOnOffAction } from '../../actions'
 import { getTickerSelector } from '../../selectors'
 import { withResource, withSubscription } from '../HOC'
 import Table from 'react-immutable-table'
@@ -10,14 +10,21 @@ class Ticker extends PureComponent {
     super()
 
     this.renderConrols = this.renderConrols.bind(this)
+    this.socketOnOff = this.socketOnOff.bind(this)
+  }
+
+  socketOnOff (state) {
+    return () => {
+      this.props.socketOnOff(state)
+    }
   }
 
   renderConrols () {
     return (
       <span>
         WS&nbsp;&nbsp;
-        <button onClick={() => {}}>Off</button>
-        <button onClick={() => {}}>On</button>
+        <button onClick={this.socketOnOff({ off: true })}>Off</button>
+        <button onClick={this.socketOnOff({ on: true })}>On</button>
       </span>
     )
   }
@@ -39,7 +46,10 @@ class Ticker extends PureComponent {
 export default withSubscription(
   withResource(
     connect(
-      (state, props) => ({ ticker: getTickerSelector(state, props) })
+      (state, props) => ({ ticker: getTickerSelector(state, props) }),
+      (dispatch, state) => ({ 
+        socketOnOff: (state) => dispatch(socketOnOffAction(state))
+      })
     )(Ticker),
     { resource: 'ticker', param: 'symbol', onUpdateAction: emptyTickerAction }
   ),

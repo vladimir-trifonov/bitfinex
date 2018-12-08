@@ -66,10 +66,22 @@ export default (emitter) => {
 
     if (subscription && subscription.symbol === symbol) {
       subscriptions[channel].chanId = chanId
+      subscriptions[channel].state = 'subscribed'
     } else {
       if (!unsubscribeInProgress(chanId)) {
         unsubscribeFromChannelByChanId(chanId)
       }
+    }
+  }
+
+  const onUnsubscribed = ({ chanId }) => {
+    removeFromUnsubscribeQueue({ chanId })
+    const channel = getChannelByChanId(chanId)
+    const subscription = subscriptions[channel]
+    
+    if (subscription) {
+      subscription.chanId = null
+      subscription.state = 'unsubscribed'
     }
   }
 
@@ -89,15 +101,45 @@ export default (emitter) => {
     }
   }
 
+  const start = () => {
+    if (!w.readyState === w.OPEN) return
+    Object.keys(subscriptions).forEach((channel) => {
+      const { state, symbol } = subscriptions[channel]
+      if (state === 'subscribed') return
+      sendMessage({
+        event: 'subscribe', 
+        channel, 
+        symbol
+      })
+    })
+  }
+
+  const stop = () => {
+    Object.keys(subscriptions).forEach((channel) => {
+      const { state, chanId } = subscriptions[channel]
+      if (state === 'unsubscribed' || 
+        !w.readyState === w.OPEN) return
+      sendMessage({
+        event: 'unsubscribe', 
+        chanId: chanId
+      })
+    })
+  }
+
+  const startStop = (state = {}) => {
+    state.on ? start() : stop()
+  }
+
   w.onopen = () => {
     while(subscribeQueue.length) subscribeToChannel(subscribeQueue.shift())
   }
 
   w.onmessage = (msg) => {
     const data = JSON.parse(msg.data)
+    data.event && console.log(data)
     if (Array.isArray(data)) onData(data)
     else if(data.event === 'subscribed') onSubscribed(data)
-    else if(data.event === 'unsubscribed') removeFromUnsubscribeQueue(data)
+    else if(data.event === 'unsubscribed') onUnsubscribed(data)
   }
 
   return { 
@@ -105,6 +147,7 @@ export default (emitter) => {
     unsubscribe: unsubscribeFromChannelByChannelName,
     setEmitter: (emitter) => emit = emitter,
     close: () => w.close(),
-    ready: (emitter) => !!emit
+    ready: (emitter) => !!emit,
+    onOff: startStop
   }
 }

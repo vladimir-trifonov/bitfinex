@@ -9,12 +9,11 @@ import Table from 'react-immutable-table'
 class Ticker extends PureComponent {
   render () {
     const { ticker, symbol } = this.props
-
+    
     return (
       <Table
         items={ticker}
         title={`Ticker ${parseSymbol(symbol, true)}`}
-        columns={['Name', 'Last', '24H', 'VOL BTC']}
         count={ticker ? ticker.size : 0}
         theme='dark1'
       />

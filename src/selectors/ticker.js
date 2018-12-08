@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { parseSymbol } from '../utils'
+import { parseSymbol, getCurrency } from '../utils'
 import { List } from 'immutable'
 
 const getTicker = ({ ticker }) => ticker
@@ -9,20 +9,26 @@ export const getTickerSelector = createSelector(
   [ getTicker, getSymbol ], 
   (ticker, symbol) => !ticker
     ? ticker
-    : List([ticker])
-        .map((ticker) => {
-          const normalized = ticker
-            // Format the 24H amount, which is in percents
-            .set(1, `${(ticker.get(1) * 100).toFixed(2)}%`)
+    : List(
+        List([ticker])
+          .map((ticker) => {
+            const vol = parseFloat(ticker.get(7))
+            // Returns only the fields, that needs to be displayed
 
-          const volInBTC = parseFloat(normalized.get(7))
-          // Returns only the fields, that needs to be displayed
-          return List.of(
-            // Format the symbol
-            parseSymbol(symbol, true),
-            normalized.get(0), 
-            normalized.get(5), 
-            `${(volInBTC | 0) === 0 ? volInBTC : (volInBTC | 0)} BTC`
-          )
-        })
+            const result = [
+              [
+                parseSymbol(symbol, true),
+                ticker.get(0)
+              ],[
+                `VOL ${(vol | 0) === 0 ? vol : (vol | 0)} ${getCurrency(symbol)}`,
+                `${ticker.get(4)} (${(ticker.get(5) * 100).toFixed(2)}%)`
+              ],[
+                `LOW ${ticker.get(9).toFixed(2)}`,
+                `HIGH ${ticker.get(8).toFixed(2)}`
+              ]
+            ]
+            return result.map(List)
+          })
+          .get(0)
+    )
 )

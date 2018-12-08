@@ -1,4 +1,4 @@
 import App from './App'
-import Tickers from './Tickers'
+import Ticker from './Ticker'
 
-export { App, Tickers }
+export { App, Ticker }

@@ -1,1 +1,1 @@
-export * from './tickers'
+export * from './ticker'

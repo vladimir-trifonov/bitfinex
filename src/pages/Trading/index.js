@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
-import { Tickers } from '../../components'
+import { Ticker } from '../../components'
 
 export class Trading extends PureComponent {
   render() {
     return (
       <main>
-        <Tickers />
+        <Ticker />
       </main>
     )
   }

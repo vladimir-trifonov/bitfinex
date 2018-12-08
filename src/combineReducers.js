@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import { ticker} from './reducers'
+import { ticker, orderBook } from './reducers'
 
 export default () => combineReducers({
   routing: routerReducer,
-  ticker
+  ticker,
+  orderBook
 })

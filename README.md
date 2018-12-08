@@ -1,6 +1,9 @@
 # Bitfinex
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+# Prerequisites
+- Node.js >= 10
+
 ## Configuration
 - `Important: Add the Bitfinex ENV variables to the corresponding .env files`
 

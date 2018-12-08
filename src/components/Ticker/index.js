@@ -3,22 +3,28 @@ import { connect } from 'react-redux'
 import { emptyTickerAction } from '../../actions'
 import { getTickerSelector } from '../../selectors'
 import { withResourceSync } from '../HOC'
+import { parseSymbol } from '../../utils'
+import Table from 'react-immutable-table'
 
 class Ticker extends PureComponent {
   render () {
-    const { ticker } = this.props
-
-    console.log(ticker)
+    const { ticker, symbol } = this.props
 
     return (
-      <div></div>
+      <Table
+        items={ticker}
+        title={`Ticker ${parseSymbol(symbol, true)}`}
+        columns={['Name', 'Last', '24H', 'VOL BTC']}
+        count={ticker ? ticker.size : 0}
+        theme='dark1'
+      />
     )
   }
 }
 
 export default withResourceSync(
   connect(
-    (state) => ({ ticker: getTickerSelector(state) })
+    (state, props) => ({ ticker: getTickerSelector(state, props) })
   )(Ticker),
   { resource: 'ticker', param: 'symbol', onUnsubscribeAction: emptyTickerAction }
 )

@@ -3,9 +3,10 @@ import { Ticker } from '../../components'
 
 export class Trading extends PureComponent {
   render() {
+    const { match: { params: { symbol = null }}} = this.props
     return (
       <main>
-        <Ticker />
+        <Ticker symbol={symbol} />
       </main>
     )
   }

@@ -1,1 +1,1 @@
-export * from './ticker'
+export * from './resource'

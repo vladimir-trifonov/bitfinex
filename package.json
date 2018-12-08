@@ -17,10 +17,12 @@
     "whatwg-fetch": "3.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --kill-others \"npm run start-proxy\" \"npm run start-react\"",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-proxy": "node ./node_modules/cors-anywhere/server"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,5 +32,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "4.1.0",
+    "cors-anywhere": "0.4.1"
+  }
 }

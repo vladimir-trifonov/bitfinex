@@ -4,5 +4,5 @@ const getTicker = ({ ticker }) => ticker
 
 export const getTickerSelector = createSelector(
   [ getTicker ], 
-  (ticker, filter) => ticker
+  (ticker) => ticker
 )

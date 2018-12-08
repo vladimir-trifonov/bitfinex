@@ -1,7 +1,7 @@
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent } from 'react'
 import { Provider } from 'react-redux'
 import { Route } from 'react-router'
-import { BrowserRouter, Redirect } from 'react-router-dom'
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom'
 import { configureStore } from '../../configureStore'
 import { Trading } from '../../pages'
 
@@ -12,10 +12,10 @@ class App extends PureComponent {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <Fragment>
+          <Switch>
             <Route path="/trading/:symbol" component={Trading} />
             <Redirect exact from="/" to={`/trading/${process.env.REACT_APP_INITIAL_SYMBOL}`} />
-          </Fragment>
+          </Switch>
         </BrowserRouter>
       </Provider>
     )

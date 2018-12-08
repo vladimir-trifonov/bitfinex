@@ -1,8 +1,8 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Provider } from 'react-redux'
-import { Route } from 'react-router-dom'
-import { ConnectedRouter } from 'connected-react-router'
-import { history, configureStore } from '../../configureStore'
+import { Route } from 'react-router'
+import { BrowserRouter, Redirect } from 'react-router-dom'
+import { configureStore } from '../../configureStore'
 import { Trading } from '../../pages'
 
 const store = configureStore()
@@ -11,11 +11,12 @@ class App extends PureComponent {
   render() {
     return (
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <BrowserRouter>
           <Fragment>
-            <Route path="/" component={Trading} />
+            <Route path="/trading/:symbol" component={Trading} />
+            <Redirect exact from="/" to={`/trading/${process.env.REACT_APP_INITIAL_SYMBOL}`} />
           </Fragment>
-        </ConnectedRouter>
+        </BrowserRouter>
       </Provider>
     )
   }

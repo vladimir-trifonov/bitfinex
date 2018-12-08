@@ -5,7 +5,10 @@ export default (emitter) => {
   let emit = null
   const w = new WebSocket(process.env.REACT_APP_BITFINEX_SOCKET_URL)
 
-  const sendMessage = (msg) => w.send(JSON.stringify(msg))
+  const sendMessage = (msg) => {
+    if (!w.readyState === w.OPEN) return
+    w.send(JSON.stringify(msg))
+  }
 
   const removeFromSubscribeQueue = (channel) => {
     subscribeQueue = subscribeQueue.filter(({channel : ch}) => channel !== ch)

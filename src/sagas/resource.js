@@ -1,27 +1,16 @@
-import { delay } from 'redux-saga'
-import { take, put, fork, cancel } from 'redux-saga/effects'
-import actions, { FETCH_RESOURCE_AND_SYNC, STOP_RESOURCE_SYNC } from '../actions'
+import { take, put, fork } from 'redux-saga/effects'
+import actions, { FETCH_RESOURCE } from '../actions'
 
-function* fetchResourceAndSync ({ resource, param }) {
-  while(true) {
-    const response = yield fetch(`${process.env.REACT_APP_BITFINEX_API_URL}${process.env[`REACT_APP_${resource.toUpperCase()}_API_PATH`]}${param}`)
-    const data = yield response.json()
-    yield put(actions[`${resource}FetchedOkAction`](data))
-    yield delay(process.env.REACT_APP_API_REFRESH_TIMEOUT)
-  }
+function* fetchResource ({ resource, param }) {
+  const url = `${process.env.REACT_APP_BITFINEX_API_URL}${process.env[`REACT_APP_${resource.toUpperCase()}_API_PATH`].replace(':param', param)}`
+  const response = yield fetch(url)
+  const data = yield response.json()
+  yield put(actions[`${resource}FetchedOkAction`](data))
 }
 
-export function* fetchResourceAndSyncSaga () {
+export function* fetchResourceSaga () {
   while (true) {
-    const { payload: { resource, param } } = yield take(FETCH_RESOURCE_AND_SYNC)
-    const syncTask = yield fork(fetchResourceAndSync, { resource, param })
-    let canceled = false
-    while (!canceled) {
-      const { payload: cancelResource } = yield take(STOP_RESOURCE_SYNC)
-      if (resource === cancelResource) {
-        yield cancel(syncTask)
-        canceled = true
-      }
-    }
+    const { payload: { resource, param } } = yield take(FETCH_RESOURCE)
+    yield fork(fetchResource, { resource, param })
   }
 }

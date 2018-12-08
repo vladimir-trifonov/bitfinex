@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { emptyOrderBookAction } from '../../actions'
 import { getOrderBookSelector } from '../../selectors'
-import Table from 'react-immutable-table'
 import { parseSymbol } from '../../utils'
-import { withSubscription } from '../HOC'
+import { withResource, withSubscription } from '../HOC'
+import Table from 'react-immutable-table'
+
 
 class OrderBook extends PureComponent {
   constructor () {
@@ -39,9 +40,12 @@ class OrderBook extends PureComponent {
 }
 
 export default withSubscription(
-  connect(
-    (state) => ({ orderBook: getOrderBookSelector(state) })
-  )(OrderBook),
+  withResource(
+    connect(
+      (state) => ({ orderBook: getOrderBookSelector(state) })
+    )(OrderBook),
+    { resource: 'orderBook', param: 'symbol', onUpdateAction: emptyOrderBookAction }
+  ),
   {  
     channel: 'book', 
     prop: 'symbol',

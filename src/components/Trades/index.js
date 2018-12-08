@@ -4,7 +4,7 @@ import { emptyTradesAction } from '../../actions'
 import { getTradesSelector } from '../../selectors'
 import Table from 'react-immutable-table'
 import { parseSymbol } from '../../utils'
-import { withSubscription } from '../HOC'
+import { withResource, withSubscription } from '../HOC'
 
 class Trades extends PureComponent {
   render () {
@@ -23,9 +23,12 @@ class Trades extends PureComponent {
 }
 
 export default withSubscription(
-  connect(
-    (state) => ({ trades: getTradesSelector(state) })
-  )(Trades),
+  withResource(
+    connect(
+      (state) => ({ trades: getTradesSelector(state) })
+    )(Trades),
+    { resource: 'trades', param: 'symbol', onUpdateAction: emptyTradesAction }
+  ),
   {  
     channel: 'trades', 
     prop: 'symbol',

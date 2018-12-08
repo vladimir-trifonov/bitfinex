@@ -1,7 +1,8 @@
 import { List } from 'immutable'
 
 export const normalizeOrderBookUpdate = (orderBook, update) => {
-  if(Array.isArray(update[1][0])) return List(update[1].map(List))
+  // Return the current state, because this is the initial load through socket
+  if(Array.isArray(update[1][0])) return orderBook
 
   let updated = orderBook
   // Update orders
@@ -44,5 +45,5 @@ export const normalizeOrderBookUpdate = (orderBook, update) => {
       updated = orderBook.filter((orders) => !(orders.get(0) === price && orders.get(1) < 0))
     }
   }
-  return updated.slice(0, 30)
+  return updated.slice(0, process.env.REACT_APP_DISPLAY_ITEMS_MAX)
 }

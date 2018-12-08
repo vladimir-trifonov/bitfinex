@@ -1,3 +1,3 @@
-import withResourceSync from './withResourceSync'
+import withResource from './withResource'
 import withSubscription from './withSubscription'
-export { withResourceSync, withSubscription }
+export { withResource, withSubscription }

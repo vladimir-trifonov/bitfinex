@@ -7,7 +7,7 @@
     "moment": "2.22.2",
     "react": "16.6.3",
     "react-dom": "16.6.3",
-    "react-immutable-table": "2.2.2",
+    "react-immutable-table": "2.2.3",
     "react-redux": "6.0.0",
     "react-router-dom": "4.3.1",
     "react-router-redux": "4.0.8",

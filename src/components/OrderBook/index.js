@@ -8,21 +8,6 @@ import Table from 'react-immutable-table'
 
 
 class OrderBook extends PureComponent {
-  constructor () {
-    super()
-
-    this.renderConrols = this.renderConrols.bind(this)
-  }
-
-  renderConrols () {
-    return (
-      <span>
-        <button onClick={() => {}}>+</button>
-        <button onClick={() => {}}>-</button>
-      </span>
-    )
-  }
-  
   render () {
     const { orderBook, symbol } = this.props
 
@@ -32,7 +17,6 @@ class OrderBook extends PureComponent {
         title={`OrderBook ${parseSymbol(symbol, true)}`}
         columns={['Price', 'Count', 'Amount']}
         count={orderBook ? orderBook.size : 0}
-        renderControls={this.renderConrols}
         theme={'dark1'}
       />
     )

@@ -24,17 +24,9 @@ Clone this repository
 
 From the root of your project run `npm install`
 
-Run `npm test` to see unit test suite test results
-
 Start doing your code changes
 
 Make sure the test suite is still working after code changes
-
-## Run tests
-Run the following command to do this:
-```sh
-npm test
-```
 
 ## Contributing 
 

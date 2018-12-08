@@ -34,7 +34,6 @@ export const normalizeOrderBookUpdate = (orderBook, update) => {
         updated = orderBook.unshift(List([price, count, amount]))
       }
     }
-    return updated
   // When count = 0 delete the price level
   } else if (count === 0) {
     // if amount = 1 remove from bids

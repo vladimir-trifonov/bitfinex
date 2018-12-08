@@ -25,7 +25,7 @@ class OrderBook extends PureComponent {
   
   render () {
     const { orderBook, symbol } = this.props
-    
+
     return (
       <Table
         items={orderBook}

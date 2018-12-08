@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { emptyTickerAction } from '../../actions'
 import { getTickerSelector } from '../../selectors'
 import { withResourceSync } from '../HOC'
-import { parseSymbol } from '../../utils'
 import Table from 'react-immutable-table'
 
 class Ticker extends PureComponent {
@@ -13,7 +12,6 @@ class Ticker extends PureComponent {
     return (
       <Table
         items={ticker}
-        title={`Ticker ${parseSymbol(symbol, true)}`}
         count={ticker ? ticker.size : 0}
         theme='dark1'
       />

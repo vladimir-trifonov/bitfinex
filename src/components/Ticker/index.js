@@ -1,20 +1,10 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchResourceAndSyncAction, stopResourceSyncAction, emptyTickerAction } from '../../actions'
+import { emptyTickerAction } from '../../actions'
 import { getTickerSelector } from '../../selectors'
+import { withResourceSync } from '../HOC'
 
 class Ticker extends PureComponent {
-  componentDidMount () {
-    const { fetchTickerAndSync, symbol } = this.props
-    fetchTickerAndSync(symbol)
-  }
-
-  componentWillUnmount () {
-    const { stopTickerSync, emptyTicker } = this.props
-    stopTickerSync()
-    emptyTicker()
-  }
-
   render () {
     const { ticker } = this.props
 
@@ -26,11 +16,9 @@ class Ticker extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => ({ ticker: getTickerSelector(state) }),
-  (dispatch) => ({ 
-    fetchTickerAndSync: (symbol) => dispatch(fetchResourceAndSyncAction({ resource: 'ticker', symbol })),
-    stopTickerSync: () => dispatch(stopResourceSyncAction('ticker')),
-    emptyTicker: () => dispatch(emptyTickerAction())
-  })
-)(Ticker)
+export default withResourceSync(
+  connect(
+    (state) => ({ ticker: getTickerSelector(state) })
+  )(Ticker),
+  { resource: 'ticker', param: 'symbol', onUnsubscribeAction: emptyTickerAction }
+)
